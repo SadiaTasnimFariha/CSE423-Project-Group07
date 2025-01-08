@@ -104,13 +104,25 @@ def draw_food():
 #special_food
 def draw_special_food():
     if special_food:
-        glColor3f(0.0, 1.0, 1.0)
-        draw_midpoint_line(special_food[0], special_food[1], special_food[0] + snake_size, special_food[1])
-        draw_midpoint_line(special_food[0], special_food[1] + snake_size, special_food[0] + snake_size, special_food[1] + snake_size)
+        x, y = special_food
+        glColor3f(0.0, 1.0, 1.0)  # Cyan color for special food
+        glBegin(GL_POINTS)
+        draw_midpoint_line(x, y, x + snake_size, y)  # Top border
+        draw_midpoint_line(x, y + snake_size, x + snake_size, y + snake_size)  # Bottom border
+        draw_midpoint_line(x, y, x, y + snake_size)  # Left border
+        draw_midpoint_line(x + snake_size, y, x + snake_size, y + snake_size)  # Right border
+        glEnd()
 #obstacles
 def draw_obstacles():
     for obstacle in obstacles:
-        draw_rect(obstacle[0],obstacle[1],snake_size,(0.5, 0.5, 0.5))
+        x, y = obstacle
+        glColor3f(0.5, 0.5, 0.5)  # Gray color for obstacles
+        glBegin(GL_POINTS)
+        draw_midpoint_line(x, y, x + snake_size, y)  # Top border
+        draw_midpoint_line(x, y + snake_size, x + snake_size, y + snake_size)  # Bottom border
+        draw_midpoint_line(x, y, x, y + snake_size)  # Left border
+        draw_midpoint_line(x + snake_size, y, x + snake_size, y + snake_size)  # Right border
+        glEnd()
 #snake movements based on direction
 def move_snake(snake, direction):
     if not snake:
@@ -131,8 +143,18 @@ def check_collision(snake, boundaries=True):
 #position of special food
 def generate_special_food():
     global special_food, special_food_timer
-    special_food= [random.randint(0, 49)*10, random.randint(0,49)*10]
-    special_food_timer= time.time()
+    while True:
+        special_food = [random.randint(0, 49) * 10, random.randint(0, 49) * 10]
+        if special_food not in player1_snake and special_food not in player2_snake and special_food not in obstacles and special_food != food:
+            break
+    special_food_timer = time.time()
+def add_obstacle():
+    while True:
+        obstacle = [random.randint(0, 49) * 10, random.randint(0, 49) * 10]
+        if obstacle not in player1_snake and obstacle not in player2_snake and obstacle not in obstacles and obstacle != food and obstacle != special_food:
+            obstacles.append(obstacle)
+            break
+
 #updating the score when body collisioning with food
 def check_food_collision(snake, score):
     global food, special_food, obstacles
