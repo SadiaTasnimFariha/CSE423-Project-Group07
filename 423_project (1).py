@@ -50,15 +50,6 @@ def draw_midpoint_line(x0, y0, x1, y1):
             err += dx
             y0 += sy
 
-def draw_rect(x, y, size, color):
-    glColor3f(*color)
-    glBegin(GL_POINTS)
-    draw_midpoint_line(x, y, x + size, y)
-    draw_midpoint_line(x, y + size, x + size, y + size)
-    draw_midpoint_line(x, y, x, y + size)
-    draw_midpoint_line(x + size, y, x + size, y + size)
-    glEnd()
-
 def draw_midpoint_circle(x_center, y_center, radius):
     x = radius
     y = 0
